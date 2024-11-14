@@ -1,0 +1,70 @@
+local function teleportVehicleToPosition(targetPosition)
+    local player = game.Players.LocalPlayer
+    local vehicleName = player.Name
+    local vehiclesFolder = workspace:FindFirstChild("Vehicles")
+    
+    if vehiclesFolder then
+        local vehicle = vehiclesFolder:FindFirstChild(vehicleName)
+        
+        if vehicle then
+            if not vehicle.PrimaryPart then
+                vehicle.PrimaryPart = vehicle:FindFirstChildOfClass("BasePart")
+            end
+            
+            local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+            if humanoid and not humanoid.SeatPart then
+                repeat task.wait()
+                    vehicle.DriveSeat:Sit(humanoid)
+                until humanoid.SeatPart ~= nil
+            end
+
+            if targetPosition ~= nil then
+                vehicle.PrimaryPart = vehicle.Body.Mass
+                local dist = (targetPosition.Position - player.Character.HumanoidRootPart.Position).magnitude
+                local TweenService = game:GetService("TweenService")
+                
+                local TweenInfoToUse = TweenInfo.new(0, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, 0, false, 0)
+                local TweenValue = Instance.new("CFrameValue")
+                TweenValue.Value = vehicle:GetPrimaryPartCFrame()    
+                
+                TweenValue.Changed:Connect(function()
+                    vehicle:PivotTo(TweenValue.Value)
+                    vehicle.PrimaryPart.Velocity = Vector3.new(0,0,0)
+                end)
+                
+                local OnTween = TweenService:Create(TweenValue, TweenInfoToUse, {Value=player.Character.HumanoidRootPart.CFrame + Vector3.new(0, 200, 0)})
+                OnTween:Play()
+                OnTween.Completed:Wait()
+
+                dist = (targetPosition.Position - player.Character.HumanoidRootPart.Position).magnitude
+                TweenInfoToUse = TweenInfo.new(dist / 175, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, 0, false, 0)
+                TweenValue = Instance.new("CFrameValue")
+                TweenValue.Value = vehicle:GetPrimaryPartCFrame()
+                
+                TweenValue.Changed:Connect(function()
+                    vehicle:PivotTo(TweenValue.Value)
+                    vehicle.PrimaryPart.Velocity = Vector3.new(0, 0, 0)
+                end)
+                
+                OnTween = TweenService:Create(TweenValue, TweenInfoToUse, {Value=targetPosition + Vector3.new(0, 200, 0)})
+                OnTween:Play()
+                OnTween.Completed:Wait()
+
+                TweenInfoToUse = TweenInfo.new(0, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, 0, false, 0)
+                TweenValue = Instance.new("CFrameValue")
+                TweenValue.Value = vehicle:GetPrimaryPartCFrame()
+                
+                TweenValue.Changed:Connect(function()
+                    vehicle:PivotTo(TweenValue.Value)
+                    vehicle.PrimaryPart.Velocity = Vector3.new(0, 0, 0)
+                end)
+                
+                OnTween = TweenService:Create(TweenValue, TweenInfoToUse, {Value=targetPosition})
+                OnTween:Play()
+                OnTween.Completed:Wait()
+            end
+        end
+    end
+end
+
+teleportVehicleToPosition(_G.targetPosition)
