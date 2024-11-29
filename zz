@@ -68,4 +68,3 @@ local function teleportVehicleToPosition(targetPosition)
 end
 
 teleportVehicleToPosition(_G.targetPosition)
-print("xDD")
