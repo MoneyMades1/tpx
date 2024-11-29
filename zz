@@ -1,3 +1,5 @@
+print("xdd")
+
 local function teleportVehicleToPosition(targetPosition)
     local player = game.Players.LocalPlayer
     local vehicleName = player.Name
@@ -68,4 +70,3 @@ local function teleportVehicleToPosition(targetPosition)
 end
 
 teleportVehicleToPosition(_G.targetPosition)
-print("xdd")
